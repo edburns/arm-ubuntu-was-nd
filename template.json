@@ -50,14 +50,10 @@
             "name": "[parameters('networkSecurityGroupName')]",
             "location": "eastus",
             "properties": {
-                "provisioningState": "Succeeded",
-                "resourceGuid": "98451fe4-71bf-44ac-a3b4-88f4d969cf06",
                 "securityRules": [
                     {
                         "name": "HTTP",
-                        "etag": "W/\"b2cc7d51-e3f4-4a73-b705-bd48220242e4\"",
                         "properties": {
-                            "provisioningState": "Succeeded",
                             "protocol": "TCP",
                             "sourcePortRange": "*",
                             "sourceAddressPrefix": "*",
@@ -73,9 +69,7 @@
                     },
                     {
                         "name": "HTTPS",
-                        "etag": "W/\"b2cc7d51-e3f4-4a73-b705-bd48220242e4\"",
                         "properties": {
-                            "provisioningState": "Succeeded",
                             "protocol": "TCP",
                             "sourcePortRange": "*",
                             "sourceAddressPrefix": "*",
@@ -91,9 +85,7 @@
                     },
                     {
                         "name": "SSH",
-                        "etag": "W/\"b2cc7d51-e3f4-4a73-b705-bd48220242e4\"",
                         "properties": {
-                            "provisioningState": "Succeeded",
                             "protocol": "TCP",
                             "sourcePortRange": "*",
                             "destinationPortRange": "22",
@@ -121,8 +113,6 @@
                 "tier": "Regional"
             },
             "properties": {
-                "provisioningState": "Succeeded",
-                "resourceGuid": "bbc1f9f4-3e98-45f5-874a-d18eaa002325",
                 "ipAddress": "104.41.139.72",
                 "publicIPAddressVersion": "IPv4",
                 "publicIPAllocationMethod": "Dynamic",
@@ -136,8 +126,6 @@
             "name": "[parameters('virtualNetworkName')]",
             "location": "eastus",
             "properties": {
-                "provisioningState": "Succeeded",
-                "resourceGuid": "50e4ddd5-cafc-4d58-98eb-3688ecd98ac1",
                 "addressSpace": {
                     "addressPrefixes": [
                         "172.16.3.0/24"
@@ -146,9 +134,7 @@
                 "subnets": [
                     {
                         "name": "default",
-                        "etag": "W/\"80eed6dd-3068-4d76-abed-dab27c3062c6\"",
                         "properties": {
-                            "provisioningState": "Succeeded",
                             "addressPrefix": "172.16.3.0/24",
                             "delegations": [],
                             "privateEndpointNetworkPolicies": "Enabled",
@@ -221,7 +207,6 @@
                 "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
             ],
             "properties": {
-                "provisioningState": "Succeeded",
                 "addressPrefix": "172.16.3.0/24",
                 "delegations": [],
                 "privateEndpointNetworkPolicies": "Enabled",
@@ -325,14 +310,10 @@
                 "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
             ],
             "properties": {
-                "provisioningState": "Succeeded",
-                "resourceGuid": "67c4e635-c8cf-4e11-a23b-8522541761a1",
                 "ipConfigurations": [
                     {
                         "name": "ipconfig1",
-                        "etag": "W/\"ef512412-aea2-4f91-ae2c-250ec927f681\"",
                         "properties": {
-                            "provisioningState": "Succeeded",
                             "privateIPAddress": "172.16.3.4",
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIPAddress": {
