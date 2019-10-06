@@ -14,6 +14,12 @@
         "vmAdminPwd": {
             "type": "securestring"
         },
+        "adminUser": {
+            "type": "string"
+        },
+        "adminPwd": {
+            "type": "securestring"
+        },
         "imInstallerLocation": {
             "type": "string"
         },
@@ -195,7 +201,7 @@
                     "fileUris": [
                         "https://raw.githubusercontent.com/majguo/arm-ubuntu-was-nd/master/install.sh"
                     ],
-                    "commandToExecute": "[concat('sh install.sh',' -l \"',parameters('imInstallerLocation'),'\" -u ',parameters('ibmUserId'),' -p ',parameters('ibmUserPwd'))]"
+                    "commandToExecute": "[concat('sh install.sh',' -l \"',parameters('imInstallerLocation'),'\" -u ',parameters('ibmUserId'),' -p ',parameters('ibmUserPwd'),' -m ',parameters('adminUser'),' -c ',parameters('adminPwd'))]"
                 }
             }
         },
