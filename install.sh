@@ -1,5 +1,5 @@
 #!/bin/sh
-while getopts "l:u:p:" opt; do
+while getopts "l:u:p:m:c:" opt; do
     case $opt in
         l)
             imKitLocation=$OPTARG #SAS URI of the IBM Installation Manager install kit in Azure Storage
@@ -9,6 +9,12 @@ while getopts "l:u:p:" opt; do
         ;;
         p)
             password=$OPTARG #password of IBM user id for downloading artifacts from IBM web site
+        ;;
+        m)
+            adminUserName=$OPTARG #User id for admimistrating WebSphere Admin Console
+        ;;
+        c)
+            adminPassword=$OPTARG #Password for administrating WebSphere Admin Console
         ;;
     esac
 done
@@ -35,5 +41,6 @@ mkdir -p ./IBM/WebSphere && mkdir -p ./IBM/IMShared
     -secureStorageFile storage_file -acceptLicense -showProgress
 
 # Create standalone application profile and start the server
-./IBM/WebSphere/bin/manageprofiles.sh -create -profileName AppSrv1 -templatePath ./IBM/WebSphere/profileTemplates/default
+./IBM/WebSphere/bin/manageprofiles.sh -create -profileName AppSrv1 -templatePath ./IBM/WebSphere/profileTemplates/default \
+    -enableAdminSecurity true -adminUserName "$adminUserName" -adminPassword "$adminPassword"
 ./IBM/WebSphere/profiles/AppSrv1/bin/startServer.sh server1
