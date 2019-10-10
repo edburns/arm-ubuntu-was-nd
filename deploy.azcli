@@ -6,15 +6,8 @@ IFS=$'\n\t'
 # -o: prevents errors in a pipeline from being masked
 # IFS new value is less likely to cause confusing bugs when looping arrays or arguments (e.g. $@)
 
-usage() { echo "Usage: $0  -u <ibmUserId> -p <ibmUserPwd> -v <vmAdminId> -w <vmAdminPwd> -m <adminUserName> -c <adminPassword> \
-	-f <imInstallKitFile> -i <subscriptionId> -g <resourceGroupName> -n <deploymentName> -l <resourceGroupLocation>" 1>&2; exit 1; }
+usage() { echo "Usage: $0 -f <imInstallKitFile> -i <subscriptionId> -g <resourceGroupName> -n <deploymentName> -l <resourceGroupLocation>" 1>&2; exit 1; }
 
-declare ibmUserId=""
-declare ibmUserPwd=""
-declare vmAdminId=""
-declare vmAdminPwd=""
-declare adminUserName=""
-declare adminPassword=""
 declare imInstallKitFile=""
 declare subscriptionId=""
 declare resourceGroupName=""
@@ -22,26 +15,8 @@ declare deploymentName=""
 declare resourceGroupLocation=""
 
 # Initialize parameters specified from command line
-while getopts ":u:p:v:w:m:c:f:i:g:n:l:" arg; do
+while getopts ":f:i:g:n:l:" arg; do
 	case "${arg}" in
-		u)
-			ibmUserId=${OPTARG}
-			;;
-		p)
-			ibmUserPwd=${OPTARG}
-			;;
-		v)
-			vmAdminId=${OPTARG}
-			;;
-		w)
-			vmAdminPwd=${OPTARG}
-			;;
-		m)
-			adminUserName=${OPTARG}
-			;;
-		c)
-			adminPassword=${OPTARG}
-			;;
 		f)
 			imInstallKitFile=${OPTARG}
 			;;
@@ -62,42 +37,6 @@ done
 shift $((OPTIND-1))
 
 #Prompt for parameters is some required parameters are missing
-if [[ -z "$ibmUserId" ]]; then
-	echo "Enter your IBM User ID:"
-	read ibmUserId
-	[[ "${ibmUserId:?}" ]]
-fi
-
-if [[ -z "$ibmUserPwd" ]]; then
-	echo "Enter your IBM User password:"
-	read ibmUserPwd
-	[[ "${ibmUserPwd:?}" ]]
-fi
-
-if [[ -z "$vmAdminId" ]]; then
-	echo "Enter your Virtual Machine admin user name:"
-	read vmAdminId
-	[[ "${vmAdminId:?}" ]]
-fi
-
-if [[ -z "$vmAdminPwd" ]]; then
-	echo "Enter your Virtual Machine admin user password:"
-	read vmAdminPwd
-	[[ "${vmAdminPwd:?}" ]]
-fi
-
-if [[ -z "$adminUserName" ]]; then
-	echo "Enter your WebSphere Admin Console user name:"
-	read adminUserName
-	[[ "${adminUserName:?}" ]]
-fi
-
-if [[ -z "$adminPassword" ]]; then
-	echo "Enter your WebSphere Admin Console user password:"
-	read adminPassword
-	[[ "${adminPassword:?}" ]]
-fi
-
 if [[ ! -f "$imInstallKitFile" ]]; then
 	echo "The IBM Installation Manager Install Kit file is necessary to setup WAS ND."
 	echo "Enter the path of IBM Installation Manager Install Kit:"
@@ -133,9 +72,8 @@ if [[ -z "$resourceGroupLocation" ]]; then
 	read resourceGroupLocation
 fi
 
-if [ -z "$ibmUserId" ] || [ -z "$ibmUserPwd" ] || [ -z "$vmAdminId" ] || [ -z "$vmAdminPwd" ] || [ -z "$adminUserName" ] || [ -z "$adminPassword" ] \
-	|| [ ! -f "$imInstallKitFile" ] || [ -z "$subscriptionId" ] || [ -z "$resourceGroupName" ] || [ -z "$deploymentName" ]; then
-	echo "Either one of ibmUserId, ibmUserPwd, vmAdminId, vmAdminPwd, adminUserName, adminPassword, subscriptionId, resourceGroupName, deploymentName is empty"
+if [ ! -f "$imInstallKitFile" ] || [ -z "$subscriptionId" ] || [ -z "$resourceGroupName" ] || [ -z "$deploymentName" ]; then
+	echo "Either one of imInstallKitFile, subscriptionId, resourceGroupName, deploymentName is empty"
 	usage
 fi
 
@@ -239,19 +177,12 @@ imInstallerLocation=$blobEndpoint$storageContainerName/"$fileName"?$sasToken
 
 #parameters JSON
 parametersJson=$( cat $parametersFilePath | jq '.parameters' )
-parametersJson=$( echo "$parametersJson" | jq --arg user "$ibmUserId" '{"ibmUserId": {"value":$user}} + .' )
-parametersJson=$( echo "$parametersJson" | jq --arg pwd "$ibmUserPwd" '{"ibmUserPwd": {"value":$pwd}} + .' )
-parametersJson=$( echo "$parametersJson" | jq --arg vmUser "$vmAdminId" '{"vmAdminId": {"value":$vmUser}} + .' )
-parametersJson=$( echo "$parametersJson" | jq --arg vmPwd "$vmAdminPwd" '{"vmAdminPwd": {"value":$vmPwd}} + .' )
-parametersJson=$( echo "$parametersJson" | jq --arg adminUser "$adminUserName" '{"adminUser": {"value":$adminUser}} + .' )
-parametersJson=$( echo "$parametersJson" | jq --arg adminPwd "$adminPassword" '{"adminPwd": {"value":$adminPwd}} + .' )
 parametersJson=$( echo "$parametersJson" | jq --arg imLocation "$imInstallerLocation" '{"imInstallerLocation": {"value":$imLocation}} + .' )
 parametersJson=$( echo "$parametersJson" | jq -c '.' )
 
 #Start deployment
 echo "Starting deployment..."
 (
-	set -x
 	az group deployment create --name "$deploymentName" --resource-group "$resourceGroupName" \
 		--template-file "$templateFilePath" --parameters "$parametersJson"
 )

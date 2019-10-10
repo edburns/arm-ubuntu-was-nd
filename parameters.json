@@ -2,5 +2,23 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "ibmUserId": {
+            "value": "GEN-UNIQUE"
+        },
+        "ibmUserPwd": {
+            "value": "GEN-UNIQUE"
+        },
+        "vmAdminId": {
+            "value": "GEN-UNIQUE"
+        },
+        "vmAdminPwd": {
+            "value": "GEN-UNIQUE"
+        },
+        "adminUser": {
+            "value": "GEN-UNIQUE"
+        },
+        "adminPwd": {
+            "value": "GEN-UNIQUE"
+        }
     }
 }

@@ -23,10 +23,6 @@
         "imInstallerLocation": {
             "type": "string"
         },
-        "diagStorageAccountName": {
-            "defaultValue": "[concat('diagstor', uniqueString(resourceGroup().id))]",
-            "type": "string"
-        },
         "virtualNetworkName": {
             "defaultValue": "[concat('vnet-', uniqueString(resourceGroup().id))]",
             "type": "string"
@@ -35,12 +31,20 @@
             "defaultValue": "[concat('wlpadmin-vm-', uniqueString(resourceGroup().id))]",
             "type": "string"
         },
+        "vmSize": {
+            "defaultValue": "Standard_D2s_v3",
+            "type": "string"
+        },
         "networkInterfaceName": {
             "defaultValue": "[concat(parameters('virtualMachineName'), '-if')]",
             "type": "string"
         },
         "publicIPAddressName": {
             "defaultValue": "[concat(parameters('virtualMachineName'), '-ip')]",
+            "type": "string"
+        },
+        "dnsLabelPrefix":{
+            "defaultValue": "wasndubuntunvm",
             "type": "string"
         },
         "networkSecurityGroupName": {
@@ -123,7 +127,10 @@
                 "publicIPAddressVersion": "IPv4",
                 "publicIPAllocationMethod": "Dynamic",
                 "idleTimeoutInMinutes": 4,
-                "ipTags": []
+                "ipTags": [],
+                "dnsSettings":{
+                    "domainNameLabel":"[parameters('dnsLabelPrefix')]"
+                }
             }
         },
         {
@@ -151,37 +158,6 @@
                 "virtualNetworkPeerings": [],
                 "enableDdosProtection": false,
                 "enableVmProtection": false
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2019-04-01",
-            "name": "[parameters('diagStorageAccountName')]",
-            "location": "eastus",
-            "sku": {
-                "name": "Standard_LRS",
-                "tier": "Standard"
-            },
-            "kind": "Storage",
-            "properties": {
-                "networkAcls": {
-                    "bypass": "AzureServices",
-                    "virtualNetworkRules": [],
-                    "ipRules": [],
-                    "defaultAction": "Allow"
-                },
-                "supportsHttpsTrafficOnly": true,
-                "encryption": {
-                    "services": {
-                        "file": {
-                            "enabled": true
-                        },
-                        "blob": {
-                            "enabled": true
-                        }
-                    },
-                    "keySource": "Microsoft.Storage"
-                }
             }
         },
         {
@@ -220,33 +196,16 @@
             }
         },
         {
-            "type": "Microsoft.Storage/storageAccounts/blobServices",
-            "apiVersion": "2019-04-01",
-            "name": "[concat(parameters('diagStorageAccountName'), '/default')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('diagStorageAccountName'))]"
-            ],
-            "properties": {
-                "cors": {
-                    "corsRules": []
-                },
-                "deleteRetentionPolicy": {
-                    "enabled": false
-                }
-            }
-        },
-        {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2019-03-01",
             "name": "[parameters('virtualMachineName')]",
             "location": "eastus",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaceName'))]",
-                "[resourceId('Microsoft.Storage/StorageAccounts', parameters('diagStorageAccountName'))]"
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaceName'))]"
             ],
             "properties": {
                 "hardwareProfile": {
-                    "vmSize": "Standard_D2s_v3"
+                    "vmSize": "[parameters('vmSize')]"
                 },
                 "storageProfile": {
                     "imageReference": {
@@ -284,25 +243,7 @@
                             "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaceName'))]"
                         }
                     ]
-                },
-                "diagnosticsProfile": {
-                    "bootDiagnostics": {
-                        "enabled": true,
-                        "storageUri": "[concat('https://', parameters('diagStorageAccountName'), '.blob.core.windows.net/')]"
-                    }
                 }
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-            "apiVersion": "2019-04-01",
-            "name": "[concat(parameters('diagStorageAccountName'), '/default/bootdiagnostics')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('diagStorageAccountName'), 'default')]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('diagStorageAccountName'))]"
-            ],
-            "properties": {
-                "publicAccess": "None"
             }
         },
         {
