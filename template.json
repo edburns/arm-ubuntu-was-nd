@@ -123,7 +123,6 @@
                 "tier": "Regional"
             },
             "properties": {
-                "ipAddress": "104.41.139.72",
                 "publicIPAddressVersion": "IPv4",
                 "publicIPAllocationMethod": "Dynamic",
                 "idleTimeoutInMinutes": 4,
@@ -148,10 +147,7 @@
                     {
                         "name": "default",
                         "properties": {
-                            "addressPrefix": "172.16.3.0/24",
-                            "delegations": [],
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
+                            "addressPrefix": "172.16.3.0/24"
                         }
                     }
                 ],
@@ -189,10 +185,7 @@
                 "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
             ],
             "properties": {
-                "addressPrefix": "172.16.3.0/24",
-                "delegations": [],
-                "privateEndpointNetworkPolicies": "Enabled",
-                "privateLinkServiceNetworkPolicies": "Enabled"
+                "addressPrefix": "172.16.3.0/24"
             }
         },
         {
@@ -261,7 +254,6 @@
                     {
                         "name": "ipconfig1",
                         "properties": {
-                            "privateIPAddress": "172.16.3.4",
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIPAddress": {
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressName'))]"
@@ -274,12 +266,6 @@
                         }
                     }
                 ],
-                "dnsSettings": {
-                    "dnsServers": [],
-                    "appliedDnsServers": [],
-                    "internalDomainNameSuffix": "0xo4iuh2zjme1ghlg0eozwmkyb.bx.internal.cloudapp.net"
-                },
-                "macAddress": "00-0D-3A-55-26-08",
                 "enableAcceleratedNetworking": false,
                 "enableIPForwarding": false,
                 "networkSecurityGroup": {
