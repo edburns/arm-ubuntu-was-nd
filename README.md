@@ -18,4 +18,4 @@
 
 ## After deployment
 - If you check the resource group in [azure portal](https://portal.azure.com/), you will see related resources created
-- Open VM resource blade and copy its domain name, then open IBM WebSphere Integrated Solutions Console for further administration by browsing https://<domain_name>:9043/ibm/console
+- Open VM resource blade and copy its DNS name, then open IBM WebSphere Integrated Solutions Console for further administration by browsing https://<dns_name>:9043/ibm/console
