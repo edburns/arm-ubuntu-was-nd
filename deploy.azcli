@@ -6,17 +6,20 @@ IFS=$'\n\t'
 # -o: prevents errors in a pipeline from being masked
 # IFS new value is less likely to cause confusing bugs when looping arrays or arguments (e.g. $@)
 
-usage() { echo "Usage: $0 -f <imInstallKitFile> -i <subscriptionId> -g <resourceGroupName> -n <deploymentName> -l <resourceGroupLocation>" 1>&2; exit 1; }
+usage() { echo "Usage: $0 -n <deploymentName> -f <imInstallKitFile> -i <subscriptionId> -g <resourceGroupName> -l <resourceGroupLocation>" 1>&2; exit 1; }
 
+declare deploymentName=""
 declare imInstallKitFile=""
 declare subscriptionId=""
 declare resourceGroupName=""
-declare deploymentName=""
 declare resourceGroupLocation=""
 
 # Initialize parameters specified from command line
-while getopts ":f:i:g:n:l:" arg; do
+while getopts ":n:f:i:g:l:" arg; do
 	case "${arg}" in
+		n)
+			deploymentName=${OPTARG}
+			;;
 		f)
 			imInstallKitFile=${OPTARG}
 			;;
@@ -26,9 +29,6 @@ while getopts ":f:i:g:n:l:" arg; do
 		g)
 			resourceGroupName=${OPTARG}
 			;;
-		n)
-			deploymentName=${OPTARG}
-			;;
 		l)
 			resourceGroupLocation=${OPTARG}
 			;;
@@ -37,6 +37,11 @@ done
 shift $((OPTIND-1))
 
 #Prompt for parameters is some required parameters are missing
+if [[ -z "$deploymentName" ]]; then
+	echo "Enter a name for this deployment:"
+	read deploymentName
+fi
+
 if [[ ! -f "$imInstallKitFile" ]]; then
 	echo "The IBM Installation Manager Install Kit file is necessary to setup WAS ND."
 	echo "Enter the path of IBM Installation Manager Install Kit:"
@@ -59,11 +64,6 @@ if [[ -z "$resourceGroupName" ]]; then
 	[[ "${resourceGroupName:?}" ]]
 fi
 
-if [[ -z "$deploymentName" ]]; then
-	echo "Enter a name for this deployment:"
-	read deploymentName
-fi
-
 if [[ -z "$resourceGroupLocation" ]]; then
 	echo "If creating a *new* resource group, you need to set a location "
 	echo "You can lookup locations with the CLI using: az account list-locations "
@@ -72,8 +72,8 @@ if [[ -z "$resourceGroupLocation" ]]; then
 	read resourceGroupLocation
 fi
 
-if [ ! -f "$imInstallKitFile" ] || [ -z "$subscriptionId" ] || [ -z "$resourceGroupName" ] || [ -z "$deploymentName" ]; then
-	echo "Either one of imInstallKitFile, subscriptionId, resourceGroupName, deploymentName is empty"
+if [ -z "$deploymentName" ] || [ ! -f "$imInstallKitFile" ] || [ -z "$subscriptionId" ] || [ -z "$resourceGroupName" ]; then
+	echo "Either one of deploymentName, imInstallKitFile, subscriptionId and resourceGroupName is empty"
 	usage
 fi
 

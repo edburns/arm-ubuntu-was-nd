@@ -13,7 +13,7 @@
  With the provided ARM template and parameters, 
  - Using deploy.azcli to deploy
      ```
-     deploy.azcli -f <imInstallKitFile> -i <subscriptionId> -g <resourceGroupName> -l <resourceGroupLocation> -n <deploymentName>
+     deploy.azcli -n <deploymentName> -f <imInstallKitFile> -i <subscriptionId> -g <resourceGroupName> -l <resourceGroupLocation>
      ```
 
 ## After deployment
