@@ -1,10 +1,10 @@
 # Deploy IBM WebSphere Application Server Netwrok Deployment Traditional with Azure ARM template and CLI
 
 ## Prerequisites
- - Register Azure subscription
- - Register IBM user id in IBM website
- - Download IBM Installation Manager install kit from IBM website
- - Install [Azure CLI](https://github.com/Azure/azure-cli)
+ - Register an [Azure subscription](https://azure.microsoft.com/en-us/)
+ - Register an [IBM id](https://idaas.iam.ibm.com/idaas/mtfim/sps/authsvc?PolicyId=urn:ibm:security:authentication:asf:basicldapuser)
+ - Download [IBM Installation Manager Installation Kit](https://www-945.ibm.com/support/fixcentral/swg/downloadFixes?parent=ibm%7ERational&product=ibm/Rational/IBM+Installation+Manager&release=1.9.0.0&platform=Linux&function=fixId&fixids=1.9.0.0-IBMIM-LINUX-X86_64-20190715_0328&useReleaseAsTarget=true&includeRequisites=1&includeSupersedes=0&downloadMethod=http)
+ - Install [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 
  ## Before using sample parameters.json
  - Replace "GEN-UNIQUE" with valid user id or password
@@ -18,4 +18,4 @@
 
 ## After deployment
 - If you check the resource group in [azure portal](https://portal.azure.com/), you will see related resources created
-- Open VM resource blade and copy its domain name, then open admin console by browsing https://<domain_name>:9043/ibm/console
+- Open VM resource blade and copy its domain name, then open IBM WebSphere Integrated Solutions Console for further administration by browsing https://<domain_name>:9043/ibm/console
