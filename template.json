@@ -20,44 +20,41 @@
         "adminPwd": {
             "type": "securestring"
         },
-        "imInstallerLocation": {
-            "type": "string"
-        },
-        "virtualMachineName": {
-            "defaultValue": "[concat('wlpadmin-vm-', uniqueString(resourceGroup().id))]",
+        "dnsLabelPrefix":{
+            "defaultValue": "wasndubuntunvm",
             "type": "string"
         },
         "vmSize": {
             "defaultValue": "Standard_D2s_v3",
             "type": "string"
         },
-        "virtualNetworkName": {
-            "defaultValue": "[concat(parameters('virtualMachineName'), '-vnet')]",
-            "type": "string"
-        },
-        "networkInterfaceName": {
-            "defaultValue": "[concat(parameters('virtualMachineName'), '-if')]",
-            "type": "string"
-        },
-        "publicIPAddressName": {
-            "defaultValue": "[concat(parameters('virtualMachineName'), '-ip')]",
-            "type": "string"
-        },
-        "dnsLabelPrefix":{
-            "defaultValue": "wasndubuntunvm",
-            "type": "string"
-        },
-        "networkSecurityGroupName": {
-            "defaultValue": "[concat(parameters('virtualMachineName'), '-nsg')]",
+        "imInstallerLocation": {
             "type": "string"
         }
     },
-    "variables": {},
+    "variables": {
+        "virtualMachineName": "[concat('wlpadmin-vm-', uniqueString(resourceGroup().id))]",
+        "virtualNetworkName": "[concat(variables('virtualMachineName'), '-vnet')]",
+        "networkInterfaceName": "[concat(variables('virtualMachineName'), '-if')]",
+        "publicIPAddressName": "[concat(variables('virtualMachineName'), '-ip')]",
+        "networkSecurityGroupName": "[concat(variables('virtualMachineName'), '-nsg')]",
+        "subnetName": "default",
+        "addressPrefix": "172.16.3.0/24",
+        "subnetAddressPrefix": "172.16.3.0/24",
+        "diskName": "[concat(variables('virtualMachineName'), '-disk')]",
+        "publicIPAddressRef": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]",
+        "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]",
+        "networkSecurityGroupRef": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]",
+        "networkInterfaceRef": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]",
+        "virtualNetworkRef": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]",
+        "virtualMachineRef": "[resourceId('Microsoft.Compute/virtualMachines', variables('virtualMachineName'))]",
+        "commandToExecute": "[concat('sh install.sh',' -l \"',parameters('imInstallerLocation'),'\" -u ',parameters('ibmUserId'),' -p ',parameters('ibmUserPwd'),' -m ',parameters('adminUser'),' -c ',parameters('adminPwd'))]"
+    },
     "resources": [
         {
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2019-06-01",
-            "name": "[parameters('networkSecurityGroupName')]",
+            "name": "[variables('networkSecurityGroupName')]",
             "location": "eastus",
             "properties": {
                 "securityRules": [
@@ -116,7 +113,7 @@
         {
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2019-06-01",
-            "name": "[parameters('publicIPAddressName')]",
+            "name": "[variables('publicIPAddressName')]",
             "location": "eastus",
             "sku": {
                 "name": "Basic",
@@ -135,19 +132,19 @@
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2019-06-01",
-            "name": "[parameters('virtualNetworkName')]",
+            "name": "[variables('virtualNetworkName')]",
             "location": "eastus",
             "properties": {
                 "addressSpace": {
                     "addressPrefixes": [
-                        "172.16.3.0/24"
+                        "[variables('addressPrefix')]"
                     ]
                 },
                 "subnets": [
                     {
-                        "name": "default",
+                        "name": "[variables('subnetName')]",
                         "properties": {
-                            "addressPrefix": "172.16.3.0/24"
+                            "addressPrefix": "[variables('subnetAddressPrefix')]"
                         }
                     }
                 ],
@@ -159,10 +156,10 @@
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "apiVersion": "2019-03-01",
-            "name": "[concat(parameters('virtualMachineName'), '/CustomScript')]",
+            "name": "[concat(variables('virtualMachineName'), '/CustomScript')]",
             "location": "eastus",
             "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachineName'))]"
+                "[variables('virtualMachineRef')]"
             ],
             "properties": {
                 "autoUpgradeMinorVersion": true,
@@ -173,28 +170,28 @@
                     "fileUris": [
                         "https://raw.githubusercontent.com/majguo/arm-ubuntu-was-nd/master/install.sh"
                     ],
-                    "commandToExecute": "[concat('sh install.sh',' -l \"',parameters('imInstallerLocation'),'\" -u ',parameters('ibmUserId'),' -p ',parameters('ibmUserPwd'),' -m ',parameters('adminUser'),' -c ',parameters('adminPwd'))]"
+                    "commandToExecute": "[variables('commandToExecute')]"
                 }
             }
         },
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2019-06-01",
-            "name": "[concat(parameters('virtualNetworkName'), '/default')]",
+            "name": "[concat(variables('virtualNetworkName'), '/', variables('subnetName'))]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
+                "[variables('virtualNetworkRef')]"
             ],
             "properties": {
-                "addressPrefix": "172.16.3.0/24"
+                "addressPrefix": "[variables('subnetAddressPrefix')]"
             }
         },
         {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2019-03-01",
-            "name": "[parameters('virtualMachineName')]",
+            "name": "[variables('virtualMachineName')]",
             "location": "eastus",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaceName'))]"
+                "[variables('networkInterfaceRef')]"
             ],
             "properties": {
                 "hardwareProfile": {
@@ -209,7 +206,7 @@
                     },
                     "osDisk": {
                         "osType": "Linux",
-                        "name": "[concat(parameters('virtualMachineName'), '_disk1_a1c02f2072384d7fa05fd6407db61979')]",
+                        "name": "[variables('diskName')]",
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "managedDisk": {
@@ -220,7 +217,7 @@
                     "dataDisks": []
                 },
                 "osProfile": {
-                    "computerName": "[parameters('virtualMachineName')]",
+                    "computerName": "[variables('virtualMachineName')]",
                     "adminUsername": "[parameters('vmAdminId')]",
                     "adminPassword": "[parameters('vmAdminPwd')]",
                     "linuxConfiguration": {
@@ -233,7 +230,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaceName'))]"
+                            "id": "[variables('networkInterfaceRef')]"
                         }
                     ]
                 }
@@ -242,12 +239,12 @@
         {
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2019-06-01",
-            "name": "[parameters('networkInterfaceName')]",
+            "name": "[variables('networkInterfaceName')]",
             "location": "eastus",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressName'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), 'default')]",
-                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
+                "[variables('publicIPAddressRef')]",
+                "[variables('subnetRef')]",
+                "[variables('networkSecurityGroupRef')]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -256,10 +253,10 @@
                         "properties": {
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressName'))]"
+                                "id": "[variables('publicIPAddressRef')]"
                             },
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), 'default')]"
+                                "id": "[variables('subnetRef')]"
                             },
                             "primary": true,
                             "privateIPAddressVersion": "IPv4"
@@ -269,7 +266,7 @@
                 "enableAcceleratedNetworking": false,
                 "enableIPForwarding": false,
                 "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
+                    "id": "[variables('networkSecurityGroupRef')]"
                 },
                 "primary": true,
                 "tapConfigurations": []
