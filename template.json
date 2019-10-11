@@ -23,16 +23,16 @@
         "imInstallerLocation": {
             "type": "string"
         },
-        "virtualNetworkName": {
-            "defaultValue": "[concat('vnet-', uniqueString(resourceGroup().id))]",
-            "type": "string"
-        },
         "virtualMachineName": {
             "defaultValue": "[concat('wlpadmin-vm-', uniqueString(resourceGroup().id))]",
             "type": "string"
         },
         "vmSize": {
             "defaultValue": "Standard_D2s_v3",
+            "type": "string"
+        },
+        "virtualNetworkName": {
+            "defaultValue": "[concat(parameters('virtualMachineName'), '-vnet')]",
             "type": "string"
         },
         "networkInterfaceName": {
