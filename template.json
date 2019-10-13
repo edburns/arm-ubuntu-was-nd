@@ -134,6 +134,9 @@
             "apiVersion": "2019-06-01",
             "name": "[variables('virtualNetworkName')]",
             "location": "eastus",
+            "dependsOn": [
+                "[variables('networkSecurityGroupRef')]"
+            ],
             "properties": {
                 "addressSpace": {
                     "addressPrefixes": [
@@ -144,7 +147,10 @@
                     {
                         "name": "[variables('subnetName')]",
                         "properties": {
-                            "addressPrefix": "[variables('subnetAddressPrefix')]"
+                            "addressPrefix": "[variables('subnetAddressPrefix')]",
+                            "networkSecurityGroup": {
+                                "id": "[variables('networkSecurityGroupRef')]"
+                            }
                         }
                     }
                 ],
@@ -179,10 +185,14 @@
             "apiVersion": "2019-06-01",
             "name": "[concat(variables('virtualNetworkName'), '/', variables('subnetName'))]",
             "dependsOn": [
-                "[variables('virtualNetworkRef')]"
+                "[variables('virtualNetworkRef')]",
+                "[variables('networkSecurityGroupRef')]"
             ],
             "properties": {
-                "addressPrefix": "[variables('subnetAddressPrefix')]"
+                "addressPrefix": "[variables('subnetAddressPrefix')]",
+                "networkSecurityGroup": {
+                    "id": "[variables('networkSecurityGroupRef')]"
+                }
             }
         },
         {
@@ -243,8 +253,7 @@
             "location": "eastus",
             "dependsOn": [
                 "[variables('publicIPAddressRef')]",
-                "[variables('subnetRef')]",
-                "[variables('networkSecurityGroupRef')]"
+                "[variables('subnetRef')]"
             ],
             "properties": {
                 "ipConfigurations": [
