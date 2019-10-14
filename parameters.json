@@ -19,6 +19,9 @@
         },
         "adminPwd": {
             "value": "GEN-UNIQUE"
+        },
+        "virtualMachineNamePrefix": {
+            "value": "wasnd-vm-"
         }
     }
 }
