@@ -35,12 +35,12 @@
             "defaultValue": "vm-",
             "type": "string"
         },
-        "virtualNetworkName": {
-            "defaultValue": "[concat('vnet-', uniqueString(resourceGroup().id))]",
+        "virtualNetworkNamePrefix": {
+            "defaultValue": "vnet-",
             "type": "string"
         },
         "addressPrefix": {
-            "defaultValue": "172.16.3.0/24",
+            "defaultValue": "10.0.0.0/16",
             "type": "string"
         },
         "subnetName": {
@@ -48,24 +48,25 @@
             "type": "string"
         },
         "subnetAddressPrefix": {
-            "defaultValue": "172.16.3.0/24",
+            "defaultValue": "10.0.1.0/24",
             "type": "string"
         },
         "networkSecurityGroupName": {
-            "defaultValue": "[concat('nsg-', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat(parameters('subnetName'),'-nsg-', uniqueString(resourceGroup().id))]",
             "type": "string"
         }
     },
     "variables": {
         "virtualMachineName": "[concat(parameters('virtualMachineNamePrefix'), uniqueString(resourceGroup().id))]",
+        "virtualNetworkName": "[concat(parameters('virtualNetworkNamePrefix'), uniqueString(resourceGroup().id))]",
         "networkInterfaceName": "[concat(variables('virtualMachineName'), '-if')]",
         "publicIPAddressName": "[concat(variables('virtualMachineName'), '-ip')]",
         "diskName": "[concat(variables('virtualMachineName'), '-disk')]",
         "publicIPAddressRef": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]",
-        "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
+        "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), parameters('subnetName'))]",
         "networkSecurityGroupRef": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]",
         "networkInterfaceRef": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]",
-        "virtualNetworkRef": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+        "virtualNetworkRef": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]",
         "virtualMachineRef": "[resourceId('Microsoft.Compute/virtualMachines', variables('virtualMachineName'))]",
         "commandToExecute": "[concat('sh install.sh',' -l \"',parameters('imInstallerLocation'),'\" -u ',parameters('ibmUserId'),' -p ',parameters('ibmUserPwd'),' -m ',parameters('adminUser'),' -c ',parameters('adminPwd'))]"
     },
@@ -151,7 +152,7 @@
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2019-06-01",
-            "name": "[parameters('virtualNetworkName')]",
+            "name": "[variables('virtualNetworkName')]",
             "location": "eastus",
             "dependsOn": [
                 "[variables('networkSecurityGroupRef')]"
@@ -162,17 +163,6 @@
                         "[parameters('addressPrefix')]"
                     ]
                 },
-                "subnets": [
-                    {
-                        "name": "[parameters('subnetName')]",
-                        "properties": {
-                            "addressPrefix": "[parameters('subnetAddressPrefix')]",
-                            "networkSecurityGroup": {
-                                "id": "[variables('networkSecurityGroupRef')]"
-                            }
-                        }
-                    }
-                ],
                 "virtualNetworkPeerings": [],
                 "enableDdosProtection": false,
                 "enableVmProtection": false
@@ -202,7 +192,7 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2019-06-01",
-            "name": "[concat(parameters('virtualNetworkName'), '/', parameters('subnetName'))]",
+            "name": "[concat(variables('virtualNetworkName'), '/', parameters('subnetName'))]",
             "dependsOn": [
                 "[variables('virtualNetworkRef')]",
                 "[variables('networkSecurityGroupRef')]"
