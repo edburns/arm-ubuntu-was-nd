@@ -192,7 +192,6 @@ echo "Starting deployment..."
 		--template-file "$templateFilePath" --parameters "$parametersJson"
 )
 
-if [ $?  == 0 ]; then
+if [[ $? -eq 0 ]]; then
 	echo "Template has been successfully deployed"
 fi
-
