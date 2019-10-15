@@ -1,4 +1,4 @@
-# Deploy IBM WebSphere Application Server Netwrok Deployment Traditional with Azure ARM template and CLI
+# Deploy IBM WebSphere Application Server Netwrok Deployment Traditional V9.0.5 with Azure ARM template and CLI
 
 ## Prerequisites
  - Register an [Azure subscription](https://azure.microsoft.com/en-us/)
@@ -15,7 +15,7 @@
  With the provided ARM template and parameters, 
  - Using deploy.azcli to deploy
      ```
-     deploy.azcli -n <deploymentName> -f <imInstallKitFile> -i <subscriptionId> -g <resourceGroupName> -l <resourceGroupLocation>
+     deploy.azcli -n <deploymentName> -f <installKitFile> -i <subscriptionId> -g <resourceGroupName> -l <resourceGroupLocation>
      ```
 
 ## After deployment
