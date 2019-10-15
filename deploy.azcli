@@ -173,12 +173,17 @@ plusFourHoursUtc=$(date -u -v+4H +%Y-%m-%dT%H:%MZ 2>/dev/null)  || plusFourHours
 #Generate SAS token
 sasToken=$( az storage container generate-sas -n "$storageContainerName" --permissions r --expiry "$plusFourHoursUtc" --account-name "$storageAccountName" --account-key "$storageAccountKey" -o json | sed 's/"//g')
 blobEndpoint=$( az storage account show -n "$storageAccountName" -g "$resourceGroupName" -o json | jq -r '.primaryEndpoints.blob' )
-imInstallerLocation=$blobEndpoint$storageContainerName/"$fileName"?$sasToken
+installKitUri=$blobEndpoint$storageContainerName/"$fileName"?$sasToken
 
 #parameters JSON
 parametersJson=$( cat $parametersFilePath | jq '.parameters' )
-parametersJson=$( echo "$parametersJson" | jq --arg imLocation "$imInstallerLocation" '{"imInstallerLocation": {"value":$imLocation}} + .' )
+parametersJson=$( echo "$parametersJson" | jq --arg uri "$installKitUri" '{"installKitUri": {"value":$uri}} + .' )
 parametersJson=$( echo "$parametersJson" | jq -c '.' )
+
+vnetName=$( echo "$parametersJson" | jq -r '.virtualNetworkName.value' )
+if [[ $(az network vnet list -g "$resourceGroupName" --query "[?name=='${vnetName}']" -o json | jq -r '. | length') -gt 0 ]]; then
+	parametersJson=$( echo "$parametersJson" | jq -c '{"virtualNetworkExisted": {"value":true}} + .' )
+fi
 
 #Start deployment
 echo "Starting deployment..."
@@ -187,7 +192,6 @@ echo "Starting deployment..."
 		--template-file "$templateFilePath" --parameters "$parametersJson"
 )
 
-if [ $?  == 0 ]; then
+if [[ $? -eq 0 ]]; then
 	echo "Template has been successfully deployed"
 fi
-
