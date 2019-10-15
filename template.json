@@ -58,6 +58,30 @@
         "networkSecurityGroupName": {
             "defaultValue": "[concat(resourceGroup().name,'-',parameters('subnetName'),'-nsg')]",
             "type": "string"
+        },
+        "virtualMachineNamePrefix": {
+            "defaultValue": "vm-",
+            "type": "string"
+        },
+        "virtualNetworkName": {
+            "defaultValue": "[concat('vnet-', uniqueString(resourceGroup().id))]",
+            "type": "string"
+        },
+        "addressPrefix": {
+            "defaultValue": "172.16.3.0/24",
+            "type": "string"
+        },
+        "subnetName": {
+            "defaultValue": "default",
+            "type": "string"
+        },
+        "subnetAddressPrefix": {
+            "defaultValue": "172.16.3.0/24",
+            "type": "string"
+        },
+        "networkSecurityGroupName": {
+            "defaultValue": "[concat('nsg-', uniqueString(resourceGroup().id))]",
+            "type": "string"
         }
     },
     "variables": {
