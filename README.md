@@ -8,6 +8,8 @@
 
  ## Before using sample parameters.json
  - Replace "GEN-UNIQUE" with valid user id or password
+ - For parameter value of "virtualMachineName" & "virtualNetworkName", suggest to replace "rgName" with your resource group name to ensure its uniqueness
+ - For the remaining parameters, you can use their default values immediately or modify per your needs
  
  ## Deploy using template, parameters & script
  With the provided ARM template and parameters, 

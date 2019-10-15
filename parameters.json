@@ -21,10 +21,10 @@
             "value": "GEN-UNIQUE"
         },
         "virtualMachineName": {
-            "value": "rg-name-wasnd-vm"
+            "value": "rgName-wasnd-vm"
         },
         "virtualNetworkName": {
-            "value": "rg-name-vnet"
+            "value": "rgName-vnet"
         },
         "addressPrefix": {
             "value": "10.0.0.0/16"
