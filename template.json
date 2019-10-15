@@ -24,7 +24,7 @@
             "type": "securestring"
         },
         "virtualMachineName": {
-            "defaultValue": "[concat(resourceGroup().name,'-vm')]",
+            "defaultValue": "[concat(resourceGroup().name,'-wasnd-vm')]",
             "type": "string"
         },
         "vmSize": {
@@ -44,7 +44,7 @@
             "type": "string"
         },
         "subnetName": {
-            "defaultValue": "default",
+            "defaultValue": "subnet01",
             "type": "string"
         },
         "subnetAddressPrefix": {
