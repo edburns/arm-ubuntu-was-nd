@@ -180,9 +180,9 @@ parametersJson=$( cat $parametersFilePath | jq '.parameters' )
 parametersJson=$( echo "$parametersJson" | jq --arg uri "$installKitUri" '{"installKitUri": {"value":$uri}} + .' )
 parametersJson=$( echo "$parametersJson" | jq -c '.' )
 
-vnetName=$( echo "$parametersJson" | jq '.virtualNetworkName.value' )
+vnetName=$( echo "$parametersJson" | jq -r '.virtualNetworkName.value' )
 if [[ $(az network vnet list -g "$resourceGroupName" --query "[?name=='${vnetName}']" -o json | jq -r '. | length') -gt 0 ]]; then
-	parametersJson=$( echo "$parametersJson" | jq '{"virtualNetworkExisted": {"value":true}} + .' )
+	parametersJson=$( echo "$parametersJson" | jq -c '{"virtualNetworkExisted": {"value":true}} + .' )
 fi
 
 #Start deployment
