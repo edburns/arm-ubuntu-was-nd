@@ -2,16 +2,13 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "installKitUri": {
+            "type": "string"
+        },
         "ibmUserId": {
             "type": "string"
         },
         "ibmUserPwd": {
-            "type": "securestring"
-        },
-        "vmAdminId": {
-            "type": "string"
-        },
-        "vmAdminPwd": {
             "type": "securestring"
         },
         "adminUser": {
@@ -20,23 +17,26 @@
         "adminPwd": {
             "type": "securestring"
         },
-        "dnsLabelPrefix":{
-            "defaultValue": "wasndubuntunvm",
+        "vmAdminId": {
+            "type": "string"
+        },
+        "vmAdminPwd": {
+            "type": "securestring"
+        },
+        "virtualMachineName": {
+            "defaultValue": "[concat(resourceGroup().name,'-vm')]",
             "type": "string"
         },
         "vmSize": {
             "defaultValue": "Standard_D2s_v3",
             "type": "string"
         },
-        "imInstallerLocation": {
+        "dnsLabelPrefix":{
+            "defaultValue": "wasndubuntunvm",
             "type": "string"
         },
-        "virtualMachineNamePrefix": {
-            "defaultValue": "vm-",
-            "type": "string"
-        },
-        "virtualNetworkNamePrefix": {
-            "defaultValue": "vnet-",
+        "virtualNetworkName": {
+            "defaultValue": "[concat(resourceGroup().name,'-vnet')]",
             "type": "string"
         },
         "addressPrefix": {
@@ -51,24 +51,27 @@
             "defaultValue": "10.0.1.0/24",
             "type": "string"
         },
+        "virtualNetworkExisted": {
+            "defaultValue": false,
+            "type": "bool"
+        },
         "networkSecurityGroupName": {
-            "defaultValue": "[concat(parameters('subnetName'),'-nsg-', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat(resourceGroup().name,'-nsg')]",
             "type": "string"
         }
     },
     "variables": {
-        "virtualMachineName": "[concat(parameters('virtualMachineNamePrefix'), uniqueString(resourceGroup().id))]",
-        "virtualNetworkName": "[concat(parameters('virtualNetworkNamePrefix'), uniqueString(resourceGroup().id))]",
-        "networkInterfaceName": "[concat(variables('virtualMachineName'), '-if')]",
-        "publicIPAddressName": "[concat(variables('virtualMachineName'), '-ip')]",
-        "diskName": "[concat(variables('virtualMachineName'), '-disk')]",
+        "networkInterfaceName": "[concat(parameters('virtualMachineName'), '-if')]",
+        "publicIPAddressName": "[concat(parameters('virtualMachineName'), '-ip')]",
+        "diskName": "[concat(parameters('virtualMachineName'), '-disk')]",
         "publicIPAddressRef": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]",
-        "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), parameters('subnetName'))]",
+        "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
         "networkSecurityGroupRef": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]",
         "networkInterfaceRef": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]",
-        "virtualNetworkRef": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]",
-        "virtualMachineRef": "[resourceId('Microsoft.Compute/virtualMachines', variables('virtualMachineName'))]",
-        "commandToExecute": "[concat('sh install.sh',' -l \"',parameters('imInstallerLocation'),'\" -u ',parameters('ibmUserId'),' -p ',parameters('ibmUserPwd'),' -m ',parameters('adminUser'),' -c ',parameters('adminPwd'))]"
+        "virtualNetworkRef": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+        "virtualMachineRef": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachineName'))]",
+        "fileUri": "https://raw.githubusercontent.com/majguo/arm-ubuntu-was-nd/master/install.sh",
+        "commandToExecute": "[concat('sh install.sh',' -l \"',parameters('installKitUri'),'\" -u ',parameters('ibmUserId'),' -p ',parameters('ibmUserPwd'),' -m ',parameters('adminUser'),' -c ',parameters('adminPwd'))]"
     },
     "resources": [
         {
@@ -152,7 +155,8 @@
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2019-06-01",
-            "name": "[variables('virtualNetworkName')]",
+            "name": "[parameters('virtualNetworkName')]",
+            "condition": "[not(parameters('virtualNetworkExisted'))]",
             "location": "eastus",
             "dependsOn": [
                 "[variables('networkSecurityGroupRef')]"
@@ -171,7 +175,7 @@
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "apiVersion": "2019-03-01",
-            "name": "[concat(variables('virtualMachineName'), '/CustomScript')]",
+            "name": "[concat(parameters('virtualMachineName'), '/CustomScript')]",
             "location": "eastus",
             "dependsOn": [
                 "[variables('virtualMachineRef')]"
@@ -183,7 +187,7 @@
                 "typeHandlerVersion": "2.0",
                 "settings": {
                     "fileUris": [
-                        "https://raw.githubusercontent.com/majguo/arm-ubuntu-was-nd/master/install.sh"
+                        "[variables('fileUri')]"
                     ],
                     "commandToExecute": "[variables('commandToExecute')]"
                 }
@@ -192,7 +196,7 @@
         {
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "apiVersion": "2019-06-01",
-            "name": "[concat(variables('virtualNetworkName'), '/', parameters('subnetName'))]",
+            "name": "[concat(parameters('virtualNetworkName'), '/', parameters('subnetName'))]",
             "dependsOn": [
                 "[variables('virtualNetworkRef')]",
                 "[variables('networkSecurityGroupRef')]"
@@ -207,7 +211,7 @@
         {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2019-03-01",
-            "name": "[variables('virtualMachineName')]",
+            "name": "[parameters('virtualMachineName')]",
             "location": "eastus",
             "dependsOn": [
                 "[variables('networkInterfaceRef')]"
@@ -236,7 +240,7 @@
                     "dataDisks": []
                 },
                 "osProfile": {
-                    "computerName": "[variables('virtualMachineName')]",
+                    "computerName": "[parameters('virtualMachineName')]",
                     "adminUsername": "[parameters('vmAdminId')]",
                     "adminPassword": "[parameters('vmAdminPwd')]",
                     "linuxConfiguration": {

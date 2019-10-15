@@ -8,23 +8,23 @@
         "ibmUserPwd": {
             "value": "GEN-UNIQUE"
         },
-        "vmAdminId": {
-            "value": "GEN-UNIQUE"
-        },
-        "vmAdminPwd": {
-            "value": "GEN-UNIQUE"
-        },
         "adminUser": {
             "value": "GEN-UNIQUE"
         },
         "adminPwd": {
             "value": "GEN-UNIQUE"
         },
-        "virtualMachineNamePrefix": {
-            "value": "wasnd-vm-"
+        "vmAdminId": {
+            "value": "GEN-UNIQUE"
         },
-        "virtualNetworkNamePrefix": {
-            "value": "vnet-"
+        "vmAdminPwd": {
+            "value": "GEN-UNIQUE"
+        },
+        "virtualMachineName": {
+            "value": "rg-name-wasnd-vm"
+        },
+        "virtualNetworkName": {
+            "value": "rg-name-vnet"
         },
         "addressPrefix": {
             "value": "10.0.0.0/16"
