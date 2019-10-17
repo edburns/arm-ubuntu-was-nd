@@ -27,8 +27,9 @@ newjdbc = AdminConfig.getid('/JDBCProvider:DB2JDBCProvider/')
 name = ['name', 'DB2DataSource']
 jndi = ['jndiName', 'DB2DataSource']
 auth = ['authDataAlias' , userAlias]
+authMechanism = ['authMechanismPreference' , 'BASIC_PASSWORD']
 helper = ['datasourceHelperClassname', 'com.ibm.websphere.rsadapter.DB2UniversalDataStoreHelper']
-dsAttrs = [name, jndi, auth, helper]
+dsAttrs = [name, jndi, auth, authMechanism, helper]
 newds = AdminConfig.create('DataSource', newjdbc, dsAttrs)
 print newds
 
