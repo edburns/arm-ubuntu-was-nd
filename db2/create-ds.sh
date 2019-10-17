@@ -12,7 +12,7 @@ dbServerPortName=$9 #Server port number of IBM DB2 Server
 wasRootPath=$10 #Root path of WebSphere
 
 # Variables
-createDSFileUri=https://raw.githubusercontent.com/majguo/arm-ubuntu-was-nd/feature/1611928-configure-jdbc-provider-and-data-source-for-was/db2/create-ds.py
+createDSFileUri=https://raw.githubusercontent.com/majguo/arm-ubuntu-was-nd/master/db2/create-ds.py
 createDSFileName=create-ds.py
 jdbcDriverPath=./db2/java
 
