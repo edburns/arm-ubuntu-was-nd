@@ -39,7 +39,3 @@ AdminConfig.create('J2EEResourceProperty', propSet, [["name", "portNumber"], ["v
 
 # Save configuratoin changes
 AdminConfig.save()
-
-# Restart server
-AdminControl.stopServer('${WAS_SERVER_NAME}')
-AdminControl.startServer('${WAS_SERVER_NAME}')
