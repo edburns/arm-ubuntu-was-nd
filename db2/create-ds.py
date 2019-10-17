@@ -11,9 +11,6 @@ provider = ['providerType', 'DB2 Universal JDBC Driver Provider (XA)']
 jdbcAttrs = [n1,  implCN, cls, provider]
 jdbCProvider = AdminConfig.create('JDBCProvider', server, jdbcAttrs)
 
-# Save configuratoin changes
-AdminConfig.save()
-
 # JASS Auth entry
 userAlias = 'wasnd/db2'
 alias = ['alias', userAlias]
@@ -22,9 +19,6 @@ password = ['password', '${DB2_DATABASE_USER_PASSWORD}']
 jaasAttrs = [alias, userid, password]
 security = AdminConfig.getid('/Security:/')
 j2cUser = AdminConfig.create('JAASAuthData', security, jaasAttrs)
-
-# Save configuratoin changes
-AdminConfig.save()
 
 # Data Source
 newjdbc = AdminConfig.getid('/JDBCProvider:DB2JDBCProvider/')
@@ -36,9 +30,6 @@ helper = ['datasourceHelperClassname', 'com.ibm.websphere.rsadapter.DB2Universal
 dsAttrs = [name, jndi, auth, authMechanism, helper]
 newds = AdminConfig.create('DataSource', newjdbc, dsAttrs)
 
-# Save configuratoin changes
-AdminConfig.save()
-
 # Data Source properties
 propSet = AdminConfig.create('J2EEResourcePropertySet', newds, [])
 AdminConfig.create('J2EEResourceProperty', propSet, [["name", "driverType"], ["value", "4"]])
@@ -48,3 +39,7 @@ AdminConfig.create('J2EEResourceProperty', propSet, [["name", "portNumber"], ["v
 
 # Save configuratoin changes
 AdminConfig.save()
+
+# Restart server
+AdminControl.stopServer('${WAS_SERVER_NAME}')
+AdminControl.startServer('${WAS_SERVER_NAME}')
