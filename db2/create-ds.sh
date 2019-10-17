@@ -35,5 +35,5 @@ sed -i "s/\${PORT_NUMBER}/${dbServerPortName}/g" "$createDSFileName"
 "$wasRootPath"/bin/wsadmin.sh -lang jython -username "$adminUserName" -password "$adminPassword" -f "$createDSFileName"
 
 # Restart server
-"$wasRootPath"/profiles/"$wasProfileName"/bin/startServer.sh "$wasServerName" -username "$adminUserName" -password "$adminPassword"
 "$wasRootPath"/profiles/"$wasProfileName"/bin/stopServer.sh "$wasServerName" -username "$adminUserName" -password "$adminPassword"
+"$wasRootPath"/profiles/"$wasProfileName"/bin/startServer.sh "$wasServerName"
