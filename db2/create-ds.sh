@@ -23,7 +23,7 @@ jdbcDriverPath=$(realpath "$jdbcDriverPath")
 # Get jython file template & replace placeholder strings with user-input parameters
 wget -O "$createDSFileName" "$createDSFileUri"
 sed -i "s/\${WAS_SERVER_NAME}/${wasServerName}/g" "$createDSFileName"
-sed -i "s/\${DB2UNIVERSAL_JDBC_DRIVER_PATH}/${jdbcDriverPath}/g" "$createDSFileName"
+sed -i "s#\${DB2UNIVERSAL_JDBC_DRIVER_PATH}#${jdbcDriverPath}#g" "$createDSFileName"
 sed -i "s/\${DB2_INST_NAME}/${instName}/g" "$createDSFileName"
 sed -i "s/\${DB2_INST_PASSWORD}/${instPwd}/g" "$createDSFileName"
 sed -i "s/\${DB2_DATABASE_NAME}/${dbName}/g" "$createDSFileName"
