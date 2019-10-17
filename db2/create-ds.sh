@@ -13,11 +13,12 @@ wsAdminPath=$9 #Path of wsadmin.sh
 # Variables
 createDSFileUri=https://raw.githubusercontent.com/majguo/arm-ubuntu-was-nd/feature/1611928-configure-jdbc-provider-and-data-source-for-was/db2/create-ds.py
 createDSFileName=create-ds.py
-jdbcDriverPath=$(realpath ./db2/java)
+jdbcDriverPath=./db2/java
 
 # Copy jdbc drivers
 mkdir -p "$jdbcDriverPath"
 find . -name "db2jcc*.jar" | xargs -I{} cp {} "$jdbcDriverPath"
+jdbcDriverPath=$(realpath "$jdbcDriverPath")
 
 # Get jython file template & replace placeholder strings with user-input parameters
 wget -O "$createDSFileName" "$createDSFileUri"
