@@ -10,17 +10,21 @@ cls = ['classpath', '${DB2UNIVERSAL_JDBC_DRIVER_PATH}/db2jcc.jar;${DB2UNIVERSAL_
 provider = ['providerType', 'DB2 Universal JDBC Driver Provider (XA)']
 jdbcAttrs = [n1,  implCN, cls, provider]
 jdbCProvider = AdminConfig.create('JDBCProvider', server, jdbcAttrs)
-print jdbCProvider
+
+# Save configuratoin changes
+AdminConfig.save()
 
 # JASS Auth entry
 userAlias = 'wasnd/db2'
 alias = ['alias', userAlias]
-userid = ['userId', '${DB2_INST_NAME}']
-password = ['password', '${DB2_INST_PASSWORD}']
+userid = ['userId', '${DB2_DATABASE_USER_NAME}']
+password = ['password', '${DB2_DATABASE_USER_PASSWORD}']
 jaasAttrs = [alias, userid, password]
 security = AdminConfig.getid('/Security:/')
 j2cUser = AdminConfig.create('JAASAuthData', security, jaasAttrs)
-print j2cUser
+
+# Save configuratoin changes
+AdminConfig.save()
 
 # Data Source
 newjdbc = AdminConfig.getid('/JDBCProvider:DB2JDBCProvider/')
@@ -31,7 +35,9 @@ authMechanism = ['authMechanismPreference' , 'BASIC_PASSWORD']
 helper = ['datasourceHelperClassname', 'com.ibm.websphere.rsadapter.DB2UniversalDataStoreHelper']
 dsAttrs = [name, jndi, auth, authMechanism, helper]
 newds = AdminConfig.create('DataSource', newjdbc, dsAttrs)
-print newds
+
+# Save configuratoin changes
+AdminConfig.save()
 
 # Data Source properties
 propSet = AdminConfig.create('J2EEResourcePropertySet', newds, [])

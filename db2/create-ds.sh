@@ -3,8 +3,8 @@
 adminUserName=$1 #User id for admimistrating WebSphere
 adminPassword=$2 #Password for administrating WebSphere
 wasServerName=$3 #WAS ND server name
-instName=$4 #Instance name of IBM DB2 Server, up to 8 characters
-instPwd=$5 #Instance password of IBM DB2 Server
+dbUserName=$4 #Database user name of IBM DB2 Server
+dbUserPwd=$5 #Database user password of IBM DB2 Server
 dbName=$6 #Database name of IBM DB2 Server
 dbServerName=$7 #Host name/IP address of IBM DB2 Server
 dbServerPortName=$8 #Server port number of IBM DB2 Server
@@ -24,8 +24,8 @@ jdbcDriverPath=$(realpath "$jdbcDriverPath")
 wget -O "$createDSFileName" "$createDSFileUri"
 sed -i "s/\${WAS_SERVER_NAME}/${wasServerName}/g" "$createDSFileName"
 sed -i "s#\${DB2UNIVERSAL_JDBC_DRIVER_PATH}#${jdbcDriverPath}#g" "$createDSFileName"
-sed -i "s/\${DB2_INST_NAME}/${instName}/g" "$createDSFileName"
-sed -i "s/\${DB2_INST_PASSWORD}/${instPwd}/g" "$createDSFileName"
+sed -i "s/\${DB2_DATABASE_USER_NAME}/${dbUserName}/g" "$createDSFileName"
+sed -i "s/\${DB2_DATABASE_USER_PASSWORD}/${dbUserPwd}/g" "$createDSFileName"
 sed -i "s/\${DB2_DATABASE_NAME}/${dbName}/g" "$createDSFileName"
 sed -i "s/\${DB2_SERVER_NAME}/${dbServerName}/g" "$createDSFileName"
 sed -i "s/\${PORT_NUMBER}/${dbServerPortName}/g" "$createDSFileName"
