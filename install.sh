@@ -40,6 +40,9 @@ repositoryUrl=http://www.ibm.com/software/repositorymanager/com.ibm.websphere.ND
 wasNDTraditional=com.ibm.websphere.ND.v90_9.0.5001.20190828_0616
 ibmJavaSDK=com.ibm.java.jdk.v8_8.0.5040.20190808_0919
 
+# Update default locale C.UTF-8 as en_US.utf8 due to fix the issue that data source built-in-derby-datasource failed to create database during testing connection
+update-locale LANG=en_US.utf8
+
 # Install package dependencies
 echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 apt-get update
@@ -69,11 +72,8 @@ if [ ! -z "$db2ServerName" ] && [ ! -z "$db2ServerPortNumber" ] && [ ! -z "$db2D
     wget https://raw.githubusercontent.com/majguo/arm-ubuntu-was-nd/master/db2/create-ds.sh
     chmod u+x create-ds.sh
     ./create-ds.sh "$adminUserName" "$adminPassword" ./IBM/WebSphere server1 "$db2ServerName" "$db2ServerPortNumber" "$db2DBName" "$db2DBUserName" "$db2DBUserPwd"
+    
+    # Restart server
+    ./IBM/WebSphere/profiles/AppSrv1/bin/stopServer.sh server1 -username "$adminUserName" -password "$adminPassword"
+    ./IBM/WebSphere/profiles/AppSrv1/bin/startServer.sh server1
 fi
-
-# Update default locale C.UTF-8 as en_US.utf8 due to fix the issue that data source built-in-derby-datasource failed to create database during testing connection
-update-locale LANG=en_US.utf8
-
-# Restart server
-./IBM/WebSphere/profiles/AppSrv1/bin/stopServer.sh server1 -username "$adminUserName" -password "$adminPassword"
-./IBM/WebSphere/profiles/AppSrv1/bin/startServer.sh server1
