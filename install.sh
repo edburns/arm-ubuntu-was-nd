@@ -68,5 +68,12 @@ mkdir -p ./IBM/WebSphere && mkdir -p ./IBM/IMShared
 if [ ! -z "$db2ServerName" ] && [ ! -z "$db2ServerPortNumber" ] && [ ! -z "$db2DBName" ] && [ ! -z "$db2DBUserName" ] && [ ! -z "$db2DBUserPwd" ]; then
     wget https://raw.githubusercontent.com/majguo/arm-ubuntu-was-nd/master/db2/create-ds.sh
     chmod u+x create-ds.sh
-    ./create-ds.sh "$adminUserName" "$adminPassword" ./IBM/WebSphere AppSrv1 server1 "$db2ServerName" "$db2ServerPortNumber" "$db2DBName" "$db2DBUserName" "$db2DBUserPwd"
+    ./create-ds.sh "$adminUserName" "$adminPassword" ./IBM/WebSphere server1 "$db2ServerName" "$db2ServerPortNumber" "$db2DBName" "$db2DBUserName" "$db2DBUserPwd"
 fi
+
+# Update default locale C.UTF-8 as en_US.utf8 due to fix the issue that data source built-in-derby-datasource failed to create database during testing connection
+update-locale LANG=en_US.utf8
+
+# Restart server
+./IBM/WebSphere/profiles/AppSrv1/bin/stopServer.sh server1 -username "$adminUserName" -password "$adminPassword"
+./IBM/WebSphere/profiles/AppSrv1/bin/startServer.sh server1
