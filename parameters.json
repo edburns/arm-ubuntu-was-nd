@@ -36,19 +36,19 @@
             "value": "10.0.1.0/24"
         },
         "db2ServerName": {
-            "value": null
+            "value": ""
         },
         "db2ServerPortNumber": {
-            "value": null
+            "value": ""
         },
         "db2DBName": {
-            "value": null
+            "value": ""
         },
         "db2DBUserName": {
-            "value": null
+            "value": ""
         },
         "db2DBUserPwd": {
-            "value": null
+            "value": ""
         }
     }
 }
