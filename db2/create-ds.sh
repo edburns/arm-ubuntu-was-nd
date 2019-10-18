@@ -1,15 +1,15 @@
 #!/bin/sh
 # Parameters
-adminUserName=$1 #User id for admimistrating WebSphere
-adminPassword=$2 #Password for administrating WebSphere
-wasProfileName=$3 #WAS ND profile name
-wasServerName=$4 #WAS ND server name
-dbUserName=$5 #Database user name of IBM DB2 Server
-dbUserPwd=$6 #Database user password of IBM DB2 Server
-dbName=$7 #Database name of IBM DB2 Server
-dbServerName=$8 #Host name/IP address of IBM DB2 Server
-dbServerPortName=$9 #Server port number of IBM DB2 Server
-wasRootPath=$10 #Root path of WebSphere
+wasAdminUserName=$1 #User id for admimistrating WebSphere
+wasAdminPwd=$2 #Password for administrating WebSphere
+wasRootPath=$3 #Root path of WebSphere
+wasProfileName=$4 #WAS ND profile name
+wasServerName=$5 #WAS ND server name
+db2ServerName=$6 #Host name/IP address of IBM DB2 Server
+db2ServerPortNumber=$7 #Server port number of IBM DB2 Server
+db2DBName=$8 #Database name of IBM DB2 Server
+db2DBUserName=$9 #Database user name of IBM DB2 Server
+db2DBUserPwd=$10 #Database user password of IBM DB2 Server
 
 # Variables
 createDSFileUri=https://raw.githubusercontent.com/majguo/arm-ubuntu-was-nd/master/db2/create-ds.py
@@ -25,15 +25,15 @@ jdbcDriverPath=$(realpath "$jdbcDriverPath")
 wget -O "$createDSFileName" "$createDSFileUri"
 sed -i "s/\${WAS_SERVER_NAME}/${wasServerName}/g" "$createDSFileName"
 sed -i "s#\${DB2UNIVERSAL_JDBC_DRIVER_PATH}#${jdbcDriverPath}#g" "$createDSFileName"
-sed -i "s/\${DB2_DATABASE_USER_NAME}/${dbUserName}/g" "$createDSFileName"
-sed -i "s/\${DB2_DATABASE_USER_PASSWORD}/${dbUserPwd}/g" "$createDSFileName"
-sed -i "s/\${DB2_DATABASE_NAME}/${dbName}/g" "$createDSFileName"
-sed -i "s/\${DB2_SERVER_NAME}/${dbServerName}/g" "$createDSFileName"
-sed -i "s/\${PORT_NUMBER}/${dbServerPortName}/g" "$createDSFileName"
+sed -i "s/\${DB2_DATABASE_USER_NAME}/${db2DBUserName}/g" "$createDSFileName"
+sed -i "s/\${DB2_DATABASE_USER_PASSWORD}/${db2DBUserPwd}/g" "$createDSFileName"
+sed -i "s/\${DB2_DATABASE_NAME}/${db2DBName}/g" "$createDSFileName"
+sed -i "s/\${DB2_SERVER_NAME}/${db2ServerName}/g" "$createDSFileName"
+sed -i "s/\${PORT_NUMBER}/${db2ServerPortNumber}/g" "$createDSFileName"
 
 # Create JDBC provider and data source using jython file
-"$wasRootPath"/bin/wsadmin.sh -lang jython -username "$adminUserName" -password "$adminPassword" -f "$createDSFileName"
+"$wasRootPath"/bin/wsadmin.sh -lang jython -username "$wasAdminUserName" -password "$wasAdminPwd" -f "$createDSFileName"
 
 # Restart server
-"$wasRootPath"/profiles/"$wasProfileName"/bin/stopServer.sh "$wasServerName" -username "$adminUserName" -password "$adminPassword"
+"$wasRootPath"/profiles/"$wasProfileName"/bin/stopServer.sh "$wasServerName" -username "$wasAdminUserName" -password "$wasAdminPwd"
 "$wasRootPath"/profiles/"$wasProfileName"/bin/startServer.sh "$wasServerName"
