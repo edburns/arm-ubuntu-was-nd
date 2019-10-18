@@ -34,6 +34,21 @@
         },
         "subnetAddressPrefix": {
             "value": "10.0.1.0/24"
+        },
+        "db2ServerName": {
+            "value": null
+        },
+        "db2ServerPortNumber": {
+            "value": null
+        },
+        "db2DBName": {
+            "value": null
+        },
+        "db2DBUserName": {
+            "value": null
+        },
+        "db2DBUserPwd": {
+            "value": null
         }
     }
 }

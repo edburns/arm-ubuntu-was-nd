@@ -1,5 +1,5 @@
 #!/bin/sh
-while getopts "l:u:p:m:c:" opt; do
+while getopts "l:u:p:m:c:n:t:d:i:s:" opt; do
     case $opt in
         l)
             imKitLocation=$OPTARG #SAS URI of the IBM Installation Manager install kit in Azure Storage
@@ -15,6 +15,21 @@ while getopts "l:u:p:m:c:" opt; do
         ;;
         c)
             adminPassword=$OPTARG #Password for administrating WebSphere Admin Console
+        ;;
+        n)
+            db2ServerName=$OPTARG #Host name/IP address of IBM DB2 Server
+        ;;
+        t)
+            db2ServerPortNumber=$OPTARG #Server port number of IBM DB2 Server
+        ;;
+        d)
+            db2DBName=$OPTARG #Database name of IBM DB2 Server
+        ;;
+        i)
+            db2DBUserName=$OPTARG #Database user name of IBM DB2 Server
+        ;;
+        s)
+            db2DBUserPwd=$OPTARG #Database user password of IBM DB2 Server
         ;;
     esac
 done
@@ -48,3 +63,10 @@ mkdir -p ./IBM/WebSphere && mkdir -p ./IBM/IMShared
 ./IBM/WebSphere/bin/manageprofiles.sh -create -profileName AppSrv1 -templatePath ./IBM/WebSphere/profileTemplates/default \
     -enableAdminSecurity true -adminUserName "$adminUserName" -adminPassword "$adminPassword"
 ./IBM/WebSphere/profiles/AppSrv1/bin/startServer.sh server1
+
+# Configure JDBC provider and data soruce for IBM DB2 Server if required
+if [ ! -z "$db2ServerName" ] && [ ! -z "$db2ServerPortNumber" ] && [ ! -z "$db2DBName" ] && [ ! -z "$db2DBUserName" ] && [ ! -z "$db2DBUserPwd" ]; then
+    wget https://raw.githubusercontent.com/majguo/arm-ubuntu-was-nd/master/db2/create-ds.sh
+    chmod u+x create-ds.sh
+    ./create-ds.sh "$adminUserName" "$adminPassword" ./IBM/WebSphere AppSrv1 server1 "$db2ServerName" "$db2ServerPortNumber" "$db2DBName" "$db2DBUserName" "$db2DBUserPwd"
+fi
