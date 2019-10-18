@@ -42,6 +42,7 @@ ibmJavaSDK=com.ibm.java.jdk.v8_8.0.5040.20190808_0919
 
 # Update default locale C.UTF-8 as en_US.utf8 due to fix the issue that data source built-in-derby-datasource failed to create database during testing connection
 update-locale LANG=en_US.utf8
+. /etc/default/locale
 
 # Install package dependencies
 echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
