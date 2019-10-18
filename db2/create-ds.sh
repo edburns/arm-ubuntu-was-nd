@@ -3,12 +3,13 @@
 wasAdminUserName=$1 #User id for admimistrating WebSphere
 wasAdminPwd=$2 #Password for administrating WebSphere
 wasRootPath=$3 #Root path of WebSphere
-wasServerName=$4 #WAS ND server name
-db2ServerName=$5 #Host name/IP address of IBM DB2 Server
-db2ServerPortNumber=$6 #Server port number of IBM DB2 Server
-db2DBName=$7 #Database name of IBM DB2 Server
-db2DBUserName=$8 #Database user name of IBM DB2 Server
-db2DBUserPwd=$9 #Database user password of IBM DB2 Server
+wasProfileName=$4 #WAS ND profile name
+wasServerName=$5 #WAS ND server name
+db2ServerName=$6 #Host name/IP address of IBM DB2 Server
+db2ServerPortNumber=$7 #Server port number of IBM DB2 Server
+db2DBName=$8 #Database name of IBM DB2 Server
+db2DBUserName=$9 #Database user name of IBM DB2 Server
+db2DBUserPwd=$10 #Database user password of IBM DB2 Server
 
 # Variables
 createDSFileUri=https://raw.githubusercontent.com/majguo/arm-ubuntu-was-nd/master/db2/create-ds.py
@@ -32,3 +33,7 @@ sed -i "s/\${PORT_NUMBER}/${db2ServerPortNumber}/g" "$createDSFileName"
 
 # Create JDBC provider and data source using jython file
 "$wasRootPath"/bin/wsadmin.sh -lang jython -username "$wasAdminUserName" -password "$wasAdminPwd" -f "$createDSFileName"
+
+# Restart server
+"$wasRootPath"/profiles/"$wasProfileName"/bin/stopServer.sh "$wasServerName" -username "$wasAdminUserName" -password "$wasAdminPwd"
+"$wasRootPath"/profiles/"$wasProfileName"/bin/startServer.sh "$wasServerName"

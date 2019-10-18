@@ -72,9 +72,5 @@ mkdir -p ./IBM/WebSphere && mkdir -p ./IBM/IMShared
 if [ ! -z "$db2ServerName" ] && [ ! -z "$db2ServerPortNumber" ] && [ ! -z "$db2DBName" ] && [ ! -z "$db2DBUserName" ] && [ ! -z "$db2DBUserPwd" ]; then
     wget https://raw.githubusercontent.com/majguo/arm-ubuntu-was-nd/master/db2/create-ds.sh
     chmod u+x create-ds.sh
-    ./create-ds.sh "$adminUserName" "$adminPassword" ./IBM/WebSphere server1 "$db2ServerName" "$db2ServerPortNumber" "$db2DBName" "$db2DBUserName" "$db2DBUserPwd"
-    
-    # Restart server
-    ./IBM/WebSphere/profiles/AppSrv1/bin/stopServer.sh server1 -username "$adminUserName" -password "$adminPassword"
-    ./IBM/WebSphere/profiles/AppSrv1/bin/startServer.sh server1
+    ./create-ds.sh "$adminUserName" "$adminPassword" ./IBM/WebSphere AppSrv1 server1 "$db2ServerName" "$db2ServerPortNumber" "$db2DBName" "$db2DBUserName" "$db2DBUserPwd"
 fi
