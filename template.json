@@ -32,7 +32,7 @@
             "type": "string"
         },
         "dnsLabelPrefix":{
-            "defaultValue": "wasndubuntunvm",
+            "defaultValue": "wasnd-ubuntuvm",
             "type": "string"
         },
         "virtualNetworkName": {
