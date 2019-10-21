@@ -8,7 +8,8 @@
 
  ## Before using sample parameters.json
  - Replace "GEN-UNIQUE" with valid user id or password
- - For parameter value of "virtualMachineName" & "virtualNetworkName", suggest to replace "rgName" with your resource group name to ensure its uniqueness
+ - For parameter value of `virtualMachineName` & `virtualNetworkName`, suggest to replace "rgName" with your resource group name to ensure its uniqueness
+ - For parameters `db2ServerName`, `db2ServerPortNumber`, `db2DBName`, `db2DBUserName` & `db2DBUserPwd`, replace their values with valid DNS name/IP address, port number, database name, user name & password of a running & accessible DB2 server, if you want to connect DB2 Server to your WebSphere server
  - For the remaining parameters, you can use their default values immediately or modify per your needs
  
  ## Deploy using template, parameters & script
