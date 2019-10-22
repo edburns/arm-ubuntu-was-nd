@@ -1,4 +1,4 @@
-# Deploy IBM WebSphere Application Server Netwrok Deployment Traditional V9.0.5 with Azure ARM template and CLI
+# Deploy IBM WebSphere Application Server ND Traditional V9.0.5 with Azure ARM template and CLI
 
 ## Prerequisites
  - Register an [Azure subscription](https://azure.microsoft.com/en-us/)
