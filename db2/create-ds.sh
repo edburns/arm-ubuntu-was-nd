@@ -14,11 +14,11 @@ db2DBUserPwd=$10 #Database user password of IBM DB2 Server
 # Variables
 createDSFileUri=https://raw.githubusercontent.com/majguo/arm-ubuntu-was-nd/master/db2/create-ds.py
 createDSFileName=create-ds.py
-jdbcDriverPath=./db2/java
+jdbcDriverPath="$wasRootPath"/db2/java
 
 # Copy jdbc drivers
 mkdir -p "$jdbcDriverPath"
-find . -name "db2jcc*.jar" | xargs -I{} cp {} "$jdbcDriverPath"
+find "$wasRootPath" -name "db2jcc*.jar" | xargs -I{} cp {} "$jdbcDriverPath"
 jdbcDriverPath=$(realpath "$jdbcDriverPath")
 
 # Get jython file template & replace placeholder strings with user-input parameters
