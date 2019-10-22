@@ -20,6 +20,9 @@
         "vmAdminPwd": {
             "value": "GEN-UNIQUE"
         },
+        "dnsLabelPrefix":{
+            "value": "wasnd-ubuntuvm"
+        },
         "virtualMachineName": {
             "value": "rgName-wasnd-vm"
         },
