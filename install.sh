@@ -49,28 +49,30 @@ echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 apt-get update
 apt-get install unzip -y
 
+# Create installation directories
+mkdir -p /opt/IBM/InstallationManager/V1.9 && mkdir -p /opt/IBM/WebSphere/ND/V9 && mkdir -p /opt/IBM/IMShared
+
 # Install IBM Installation Manager
 wget -O "$imKitName" "$imKitLocation"
 mkdir im_installer
 unzip "$imKitName" -d im_installer
-./im_installer/userinstc -log log_file -acceptLicense -installationDirectory IBM/InstallationManager
+./im_installer/userinstc -log log_file -acceptLicense -installationDirectory /opt/IBM/InstallationManager/V1.9
 
 # Install IBM WebSphere Application Server Network Deployment V9 using IBM Instalation Manager
-./IBM/InstallationManager/eclipse/tools/imutilsc saveCredential -secureStorageFile storage_file \
+/opt/IBM/InstallationManager/V1.9/eclipse/tools/imutilsc saveCredential -secureStorageFile storage_file \
     -userName "$userName" -userPassword "$password" -url "$repositoryUrl"
-mkdir -p ./IBM/WebSphere && mkdir -p ./IBM/IMShared
-./IBM/InstallationManager/eclipse/tools/imcl install "$wasNDTraditional" "$ibmJavaSDK" -repositories "$repositoryUrl" \
-    -installationDirectory  ./IBM/WebSphere/ -sharedResourcesDirectory ./IBM/IMShared/ \
+/opt/IBM/InstallationManager/V1.9/eclipse/tools/imcl install "$wasNDTraditional" "$ibmJavaSDK" -repositories "$repositoryUrl" \
+    -installationDirectory /opt/IBM/WebSphere/ND/V9/ -sharedResourcesDirectory /opt/IBM/IMShared/ \
     -secureStorageFile storage_file -acceptLicense -showProgress
 
 # Create standalone application profile and start the server
-./IBM/WebSphere/bin/manageprofiles.sh -create -profileName AppSrv1 -templatePath ./IBM/WebSphere/profileTemplates/default \
+/opt/IBM/WebSphere/ND/V9/bin/manageprofiles.sh -create -profileName AppSrv1 -templatePath /opt/IBM/WebSphere/ND/V9/profileTemplates/default \
     -enableAdminSecurity true -adminUserName "$adminUserName" -adminPassword "$adminPassword"
-./IBM/WebSphere/profiles/AppSrv1/bin/startServer.sh server1
+/opt/IBM/WebSphere/ND/V9/profiles/AppSrv1/bin/startServer.sh server1
 
 # Configure JDBC provider and data soruce for IBM DB2 Server if required
 if [ ! -z "$db2ServerName" ] && [ ! -z "$db2ServerPortNumber" ] && [ ! -z "$db2DBName" ] && [ ! -z "$db2DBUserName" ] && [ ! -z "$db2DBUserPwd" ]; then
     wget https://raw.githubusercontent.com/majguo/arm-ubuntu-was-nd/master/db2/create-ds.sh
     chmod u+x create-ds.sh
-    ./create-ds.sh "$adminUserName" "$adminPassword" ./IBM/WebSphere AppSrv1 server1 "$db2ServerName" "$db2ServerPortNumber" "$db2DBName" "$db2DBUserName" "$db2DBUserPwd"
+    ./create-ds.sh "$adminUserName" "$adminPassword" /opt/IBM/WebSphere/ND/V9 AppSrv1 server1 "$db2ServerName" "$db2ServerPortNumber" "$db2DBName" "$db2DBUserName" "$db2DBUserPwd"
 fi
