@@ -85,7 +85,7 @@
         "networkInterfaceRef": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]",
         "virtualNetworkRef": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
         "virtualMachineRef": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachineName'))]",
-        "fileUri": "https://raw.githubusercontent.com/majguo/arm-ubuntu-was-nd/master/install.sh",
+        "fileUri": "${artifactsLocationBase}/${project.artifactId}/${git.tag}/src/main/scripts/install.sh",
         "commandToExecute1": "[concat('sh install.sh',' -l \"',parameters('installKitUri'),'\" -u ',parameters('ibmUserId'),' -p ',parameters('ibmUserPwd'),' -m ',parameters('adminUser'),' -c ',parameters('adminPwd'))]",
         "commandToExecute2": "[concat(' -n \"',parameters('db2ServerName'),'\" -t ',parameters('db2ServerPortNumber'),' -d ',parameters('db2DBName'),' -i ',parameters('db2DBUserName'),' -s ',parameters('db2DBUserPwd'))]"
     },
