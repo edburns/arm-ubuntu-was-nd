@@ -1,5 +1,5 @@
 #!/bin/sh
-while getopts "l:u:p:m:c:n:t:d:i:s:" opt; do
+while getopts "l:u:p:m:c:n:t:d:i:s:a:" opt; do
     case $opt in
         l)
             imKitLocation=$OPTARG #SAS URI of the IBM Installation Manager install kit in Azure Storage
@@ -30,6 +30,9 @@ while getopts "l:u:p:m:c:n:t:d:i:s:" opt; do
         ;;
         s)
             db2DBUserPwd=$OPTARG #Database user password of IBM DB2 Server
+        ;;
+        a)
+            scriptLocation=$OPTARG #Script location ends in a trailing slash
         ;;
     esac
 done
@@ -72,7 +75,7 @@ unzip "$imKitName" -d im_installer
 
 # Configure JDBC provider and data soruce for IBM DB2 Server if required
 if [ ! -z "$db2ServerName" ] && [ ! -z "$db2ServerPortNumber" ] && [ ! -z "$db2DBName" ] && [ ! -z "$db2DBUserName" ] && [ ! -z "$db2DBUserPwd" ]; then
-    wget https://raw.githubusercontent.com/majguo/arm-ubuntu-was-nd/master/db2/create-ds.sh
+    wget "$scriptLocation"db2/create-ds.sh
     chmod u+x create-ds.sh
-    ./create-ds.sh "$adminUserName" "$adminPassword" /opt/IBM/WebSphere/ND/V9 AppSrv1 server1 "$db2ServerName" "$db2ServerPortNumber" "$db2DBName" "$db2DBUserName" "$db2DBUserPwd"
+    ./create-ds.sh "$adminUserName" "$adminPassword" /opt/IBM/WebSphere/ND/V9 AppSrv1 server1 "$db2ServerName" "$db2ServerPortNumber" "$db2DBName" "$db2DBUserName" "$db2DBUserPwd" "$scriptLocation"
 fi
