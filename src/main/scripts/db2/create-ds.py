@@ -8,7 +8,7 @@ n1 = ['name', 'DB2JDBCProvider']
 implCN = ['implementationClassName', 'com.ibm.db2.jcc.DB2XADataSource']
 cls = ['classpath', '${DB2UNIVERSAL_JDBC_DRIVER_PATH}/db2jcc.jar;${DB2UNIVERSAL_JDBC_DRIVER_PATH}/db2jcc_license_cu.jar;${DB2UNIVERSAL_JDBC_DRIVER_PATH}/db2jcc_license_cisuz.jar']
 provider = ['providerType', 'DB2 Universal JDBC Driver Provider (XA)']
-xa = ['xa', True]
+xa = ['xa', 'true']
 jdbcAttrs = [n1,  implCN, cls, provider, xa]
 jdbCProvider = AdminConfig.create('JDBCProvider', server, jdbcAttrs)
 
