@@ -3,55 +3,55 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "ibmUserId": {
-            "value": "GEN-UNIQUE"
+            "value": "${ibmUserId}"
         },
         "ibmUserPwd": {
-            "value": "GEN-UNIQUE"
+            "value": "${ibmUserPwd}"
         },
         "adminUser": {
-            "value": "GEN-UNIQUE"
+            "value": "${adminUser}"
         },
         "adminPwd": {
-            "value": "GEN-UNIQUE"
+            "value": "${adminPwd}"
         },
         "vmAdminId": {
-            "value": "GEN-UNIQUE"
+            "value": "${vmAdminId}"
         },
         "vmAdminPwd": {
-            "value": "GEN-UNIQUE"
+            "value": "${vmAdminPwd}"
         },
         "dnsLabelPrefix":{
-            "value": "wasnd-ubuntuvm"
+            "value": "${dnsLabelPrefix}"
         },
         "virtualMachineName": {
-            "value": "rgName-wasnd-vm"
+            "value": "${virtualMachineName}"
         },
         "virtualNetworkName": {
-            "value": "rgName-vnet"
+            "value": "${virtualNetworkName}"
         },
         "addressPrefix": {
-            "value": "10.0.0.0/16"
+            "value": "${addressPrefix}"
         },
         "subnetName": {
-            "value": "subnet01"
+            "value": "${subnetName}"
         },
         "subnetAddressPrefix": {
-            "value": "10.0.1.0/24"
+            "value": "${subnetAddressPrefix}"
         },
         "db2ServerName": {
-            "value": ""
+            "value": "${db2ServerName}"
         },
         "db2ServerPortNumber": {
-            "value": ""
+            "value": "${db2ServerPortNumber}"
         },
         "db2DBName": {
-            "value": ""
+            "value": "${db2DBName}"
         },
         "db2DBUserName": {
-            "value": ""
+            "value": "${db2DBUserName}"
         },
         "db2DBUserPwd": {
-            "value": ""
+            "value": "${db2DBUserPwd}"
         }
     }
 }
