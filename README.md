@@ -9,9 +9,12 @@
  - Install Maven
 
  ## Steps of deployment
- 1. Checkout [azure-quickstart-templates repo](https://github.com/Azure/azure-quickstart-templates) under the specified parent directory
- 2. Checkout this repo under the same parent directory and change to directory hosting the repo project
- 3. Build the project by replacing all placeholder `${<place_holder>}` with valid values
+ 1. Checkout [arm-oraclelinux-wls](https://github.com/wls-eng/arm-oraclelinux-wls)
+    - change to directory hosting the repo project
+    - change to parent directory & run `mvn clean install`
+ 2. Checkout [azure-quickstart-templates repo](https://github.com/Azure/azure-quickstart-templates) under the specified parent directory
+ 3. Checkout this repo under the same parent directory and change to directory hosting the repo project
+ 4. Build the project by replacing all placeholder `${<place_holder>}` with valid values
     - if you want to connect DB2 Server to your WebSphere server, provide valid DNS name/IP address, port number, database name, user name & password of a running & accessible DB2 server for parameters `db2ServerName`, `db2ServerPortNumber`, `db2DBName`, `db2DBUserName` & `db2DBUserPwd`
       ```
       mvn -Dgit.repo=<repo_user> -Dgit.tag=<repo_tag> -DibmUserId=<ibmUserId> -DibmUserPwd=<ibmUserPwd> -DadminUser=<adminUser> -DadminPwd=<adminPwd> -DvmAdminId=<vmAdminId> -DvmAdminPwd=<vmAdminPwd> -DdnsLabelPrefix=<dnsLabelPrefix> -DvirtualMachineName=<virtualMachineName> -DvirtualNetworkName=<virtualNetworkName> -DaddressPrefix=<addressPrefix> -DsubnetName=<subnetName> -DsubnetAddressPrefix=<subnetAddressPrefix> -Ddb2ServerName=<db2ServerName> -Ddb2ServerPortNumber=<db2ServerPortNumber> -Ddb2DBName=<db2DBName> -Ddb2DBUserName=<db2DBUserName> -Ddb2DBUserPwd=<db2DBUserPwd> -Dtest.args="-Test All" -Ptemplate-validation-tests clean install
@@ -20,8 +23,8 @@
       ```
       mvn -Dgit.repo=<repo_user> -Dgit.tag=<repo_tag> -DibmUserId=<ibmUserId> -DibmUserPwd=<ibmUserPwd> -DadminUser=<adminUser> -DadminPwd=<adminPwd> -DvmAdminId=<vmAdminId> -DvmAdminPwd=<vmAdminPwd> -DdnsLabelPrefix=<dnsLabelPrefix> -DvirtualMachineName=<virtualMachineName> -DvirtualNetworkName=<virtualNetworkName> -DaddressPrefix=<addressPrefix> -DsubnetName=<subnetName> -DsubnetAddressPrefix=<subnetAddressPrefix> -Ddb2ServerName= -Ddb2ServerPortNumber= -Ddb2DBName= -Ddb2DBUserName= -Ddb2DBUserPwd= -Dtest.args="-Test All" -Ptemplate-validation-tests clean install
       ```
- 4. Change to `.\target\scripts` directory
- 5. Using `deploy.azcli` to deploy
+ 5. Change to `.\target\scripts` directory
+ 6. Using `deploy.azcli` to deploy
     ```
     deploy.azcli -n <deploymentName> -f <installKitFile> -i <subscriptionId> -g <resourceGroupName> -l <resourceGroupLocation>
     ```
