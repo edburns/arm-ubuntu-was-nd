@@ -52,6 +52,9 @@
         },
         "db2DBUserPwd": {
             "value": "${db2DBUserPwd}"
+        },
+        "connectToDB2Server": {
+            "value": ${connectToDB2Server}
         }
     }
 }
