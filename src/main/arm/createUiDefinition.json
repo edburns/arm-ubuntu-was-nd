@@ -173,23 +173,23 @@
                 "elements": [
                     {
                         "name": "connectToDB2Server",
-						"type": "Microsoft.Common.OptionsGroup",
-						"label": "Connect to DB2 Server?",
-						"defaultValue": "Yes",
-						"toolTip": "Select 'Yes' and provide required info to configure the connection to IBM DB2 Server.",
-						"constraints": {
-							"allowedValues": [
-							{
-								"label": "Yes",
-								"value": true
-							},
-							{
-								"label": "No",
-								"value": false
-							}
-							],
-							"required": true
-						}
+					    "type": "Microsoft.Common.OptionsGroup",
+					    "label": "Connect to DB2 Server?",
+					    "defaultValue": "Yes",
+					    "toolTip": "Select 'Yes' and provide required info to configure the connection to IBM DB2 Server.",
+					    "constraints": {
+						    "allowedValues": [
+						        {
+								    "label": "Yes",
+								    "value": true
+							    },
+							    {
+								    "label": "No",
+								    "value": false
+							    }
+						    ],
+						    "required": true
+					    }
                     },
                     {
                         "name": "connectionInfo",
