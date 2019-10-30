@@ -181,11 +181,11 @@
                         "allowedValues": [
                             {
                                 "label": "Yes",
-                                "value": true
+                                "value": "true"
                             },
                             {
                                 "label": "No",
-                                "value": false
+                                "value": "false"
                             }
                         ],
                         "required": true
@@ -249,7 +249,7 @@
                                 }
                             }
                         ],
-                        "visible": "[steps('DB2ServerConnectionConfig').connectToDB2Server]"
+                        "visible": "[bool(steps('DB2ServerConnectionConfig').connectToDB2Server)]"
                     }
                 ]
             }
@@ -265,8 +265,8 @@
             "adminUser": "[steps('Prerequisites').Credentials.wasAdminUsername]",
             "adminPwd": "[steps('Prerequisites').Credentials.wasAdminPassword]",
             "installKitUri": "[steps('Prerequisites').IBMInstallKit.uri]",
+            "connectToDB2Server": "[steps('DB2ServerConnectionConfig').connectToDB2Server]",
             "db2ConnConfig": {
-                "connect": "[steps('DB2ServerConnectionConfig').connectToDB2Server]",
                 "serverName": "[steps('DB2ServerConnectionConfig').connectionInfo.db2ServerName]",
                 "portNumber": "[steps('DB2ServerConnectionConfig').connectionInfo.db2ServerPortNumber]",
                 "dBName": "[steps('DB2ServerConnectionConfig').connectionInfo.db2DBName]",

@@ -38,14 +38,16 @@
         "subnetAddressPrefix": {
             "value": "${subnetAddressPrefix}"
         },
+        "connectToDB2Server": {
+            "value": "${connectToDB2Server}"
+        },
         "db2ConnConfig": {
             "value": {
                 "serverName": "${db2ServerName}",
                 "portNumber": "${db2ServerPortNumber}",
                 "dBName": "${db2DBName}",
                 "dBUserName": "${db2DBUserName}",
-                "dBUserPwd": "${db2DBUserPwd}",
-                "connect": ${connectToDB2Server}
+                "dBUserPwd": "${db2DBUserPwd}"
             }
         }
     }
