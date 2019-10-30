@@ -65,7 +65,7 @@
                                 "constraints": {
                                     "required": true,
                                     "regex": "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$",
-                                    "validationMessage": "The value must be a valid email address"
+                                    "validationMessage": "The value must be a valid email address."
                                 }
                             },
                             {
@@ -89,7 +89,7 @@
                                 "constraints": {
                                     "required": true,
                                     "regex": "^[Yy]$",
-                                    "validationMessage": "The value must be Y/y to proceed the deployment"
+                                    "validationMessage": "The value must be Y/y to proceed the deployment."
                                 }
                             },
                             {
@@ -154,8 +154,8 @@
                                 "label": "The Uri to the accessible IBM Installation Manager Installation Kit V1.9",
                                 "constraints": {
                                     "required": true,
-                                    "regex": "^(https?:\/\/)?([\\w\\-])+\\.{1}([a-zA-Z]{2,63})([\/\\w-]*)*\/?\\??([^#\n\r]*)?#?([^\n\r]*)?$",
-                                    "validationMessage": "The value must be a valid URI"
+                                    "regex": "^(https?:\/\/)?([\\w-])+\\.([a-zA-Z]{2,63})([\/\\w-]*)*\/?\\??([^#\n\r]*)?#?([^\n\r]*)?$",
+                                    "validationMessage": "The value must be a valid URI."
                                 }
                             }
                         ]
@@ -204,7 +204,7 @@
                                 "constraints": {
                                     "required": true,
                                     "regex": "^((\\*)|((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)|((\\*\\.)?([a-zA-Z0-9-]+\\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\\.[a-zA-Z]{2,63}?))$",
-                                    "validationMessage": "The value must be a valid DNS name or IP address"
+                                    "validationMessage": "The value must be a valid DNS name or IP address."
                                 }
                             },
                             {
