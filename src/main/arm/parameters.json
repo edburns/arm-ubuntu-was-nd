@@ -38,23 +38,15 @@
         "subnetAddressPrefix": {
             "value": "${subnetAddressPrefix}"
         },
-        "db2ServerName": {
-            "value": "${db2ServerName}"
-        },
-        "db2ServerPortNumber": {
-            "value": "${db2ServerPortNumber}"
-        },
-        "db2DBName": {
-            "value": "${db2DBName}"
-        },
-        "db2DBUserName": {
-            "value": "${db2DBUserName}"
-        },
-        "db2DBUserPwd": {
-            "value": "${db2DBUserPwd}"
-        },
-        "connectToDB2Server": {
-            "value": ${connectToDB2Server}
+        "db2ConnConfig": {
+            "value": {
+                "serverName": "${db2ServerName}",
+                "portNumber": "${db2ServerPortNumber}",
+                "dBName": "${db2DBName}",
+                "dBUserName": "${db2DBUserName}",
+                "dBUserPwd": "${db2DBUserPwd}",
+                "connect": ${connectToDB2Server}
+            }
         }
     }
 }
