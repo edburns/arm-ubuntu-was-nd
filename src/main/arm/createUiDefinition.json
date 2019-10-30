@@ -84,12 +84,12 @@
                                 "name": "acceptIBMLicenseAgreement",
                                 "label": "Accept IBM License Agreement",
                                 "type": "Microsoft.Common.TextBox",
-                                "toolTip": "A value not equal to Y/y indicates you do not accept the IBM License Agreement. In that case the deployment will not be proceeded.",
+                                "toolTip": "A value not equal to Y/y indicates you do not accept the IBM License Agreement. In that case the deployment will not proceed.",
                                 "defaultValue": "Y",
                                 "constraints": {
                                     "required": true,
                                     "regex": "^[Yy]$",
-                                    "validationMessage": "The value must be Y/y to proceed the deployment."
+                                    "validationMessage": "The value must be Y/y to proceed with deployment."
                                 }
                             },
                             {
